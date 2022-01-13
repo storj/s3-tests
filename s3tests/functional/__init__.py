@@ -332,12 +332,30 @@ def setup():
         targets[name] = RegionsConn()
 
         for (k, conf) in regions.iteritems():
+            access_key = cfg.get(section, 'access_key')
+            secret_key = cfg.get(section, 'secret_key')
+            is_secure = conf.is_secure
+            endpoint = conf.host
+            port = conf.port
+
+            # known environment variables for AWS override config.
+            # todo: allow for different environment variables for alternate
+            # connections, e.g. the alt credentials for acl tests.
+            if 'AWS_ACCESS_KEY_ID' in os.environ:
+                access_key = os.environ['AWS_ACCESS_KEY_ID']
+            if 'AWS_SECRET_ACCESS_KEY' in os.environ:
+                secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
+            if 'SECURE' in os.environ:
+                is_secure = True if os.environ['SECURE'] == "1" else False
+            if 'ENDPOINT' in os.environ:
+                endpoint, port = parse_hostport(os.environ['ENDPOINT'])
+
             conn = boto.s3.connection.S3Connection(
-                aws_access_key_id=cfg.get(section, 'access_key'),
-                aws_secret_access_key=cfg.get(section, 'secret_key'),
-                is_secure=conf.is_secure,
-                port=conf.port,
-                host=conf.host,
+                aws_access_key_id=access_key,
+                aws_secret_access_key=secret_key,
+                is_secure=is_secure,
+                port=port,
+                host=endpoint,
                 # TODO test vhost calling format
                 calling_format=conf.calling_format,
                 )
@@ -364,6 +382,22 @@ def setup():
     # really fail.
     nuke_prefixed_buckets(prefix=prefix)
 
+def parse_hostport(s):
+    """
+    Parse a string to obtain the host and port where the input could
+    be a URL with scheme, or a host without the scheme. Example inputs:
+    http://localhost, http://localhost:8000, localhost, localhost:8000.
+
+    Prefixing // to input that doesn't contain the scheme will ensure the
+    host and port are correctly parsed.
+
+    See https://docs.python.org/3/library/urllib.parse.html
+    """
+    u = urlparse(s)
+    if u.scheme == '':
+        u = urlparse('//'+s)
+
+    return u.hostname, u.port
 
 def teardown():
     # remove our buckets here also, to avoid littering
