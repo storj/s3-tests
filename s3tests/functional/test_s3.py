@@ -412,7 +412,7 @@ def test_bucket_list_delimiter_whitespace():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='dot delimiter characters')
-@attr('skip_for_storj') # todo: invalid characters error (dot in request uri rejected)
+@attr('skip_for_storj') # todo: invalid characters error (dot in request uri rejected): https://github.com/storj/gateway-mt/issues/143
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
