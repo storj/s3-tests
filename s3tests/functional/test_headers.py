@@ -184,7 +184,7 @@ def tag(*tags):
 @attr(method='put')
 @attr(operation='create w/invalid MD5')
 @attr(assertion='fails 400')
-@attr('skip_for_storj') # todo: returns BadDigest, not InvalidDigest
+@attr('skip_for_storj') # todo: returns BadDigest, not InvalidDigest: https://github.com/storj/gateway-mt/issues/140
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_object_create_bad_md5_invalid_short():
     key = _setup_bad_object({'Content-MD5':'YWJyYWNhZGFicmE='})
@@ -472,7 +472,7 @@ def test_object_create_bad_authorization_unreadable():
 @attr(method='put')
 @attr(operation='create w/empty authorization')
 @attr(assertion='fails 403')
-@attr('skip_for_storj') # todo: returns 400, not 403
+@attr('skip_for_storj') # todo: returns 400, not 403: https://github.com/storj/gateway-mt/issues/142
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_object_create_bad_authorization_empty():
     key = _setup_bad_object({'Authorization': ''})
@@ -968,7 +968,7 @@ def test_object_create_bad_date_after_end_aws2():
 @attr(method='put')
 @attr(operation='create w/invalid authorization')
 @attr(assertion='fails 400')
-@attr('skip_for_storj') # todo: returns MissingFields, not InvalidArgument
+@attr('skip_for_storj') # todo: returns MissingFields, not InvalidArgument: https://github.com/storj/gateway-mt/issues/142
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_bucket_create_bad_authorization_invalid_aws2():
     check_aws2_support()
