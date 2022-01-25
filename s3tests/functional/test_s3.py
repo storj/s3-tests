@@ -6945,7 +6945,9 @@ def test_list_multipart_upload():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='multi-part upload with missing part')
-@attr('skip_for_storj') # todo: does not raise an error
+# todo: doesn't raise an error, because etag validation was disabled.
+# see https://github.com/storj/gateway-mt/issues/43
+@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6965,7 +6967,9 @@ def test_multipart_upload_missing_part():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='multi-part upload with incorrect ETag')
-@attr('skip_for_storj') # todo: does not raise an error
+# todo: doesn't raise an error, because etag validation was disabled.
+# see https://github.com/storj/gateway-mt/issues/43
+@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
