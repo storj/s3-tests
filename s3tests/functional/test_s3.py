@@ -777,7 +777,7 @@ def test_bucket_list_maxkeys_one():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='pagination w/max_keys=0')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
+@attr('skip_for_storj') # todo: max_keys=0 returns all results, not zero: https://github.com/storj/gateway-mt/issues/146
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6912,7 +6912,9 @@ def test_abort_multipart_upload_not_found():
 @attr(method='put')
 @attr(operation='concurrent multi-part uploads')
 @attr(assertion='successful')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
+# todo: it appears subsequent multi-part upload requests for the same key overwrites the previous request
+# instead of creating a new one
+@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
