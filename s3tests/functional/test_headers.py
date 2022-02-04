@@ -343,7 +343,7 @@ def test_object_create_bad_contentlength_negative():
 @attr(method='put')
 @attr(operation='create w/no content length')
 @attr(assertion='fails 411')
-@attr('skip_for_storj') # todo: returns 400, not 411
+@attr('skip_for_storj') # todo: returns 400, not 411: https://github.com/storj/gateway-mt/issues/150
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_object_create_bad_contentlength_none():
     key = _setup_bad_object(remove=('Content-Length',))
@@ -704,7 +704,7 @@ def test_bucket_create_bad_authorization_unreadable():
 @attr(method='put')
 @attr(operation='create w/empty authorization')
 @attr(assertion='fails 403')
-@attr('skip_for_storj') # todo: returns 400, not 403
+@attr('skip_for_storj') # todo: returns 400, not 403: https://github.com/storj/gateway-mt/issues/142
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_bucket_create_bad_authorization_empty():
     _add_custom_headers({'Authorization': ''})
