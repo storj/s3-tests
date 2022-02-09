@@ -185,7 +185,6 @@ def _get_alt_connection():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='pagination w/max_keys=2, no marker')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -214,7 +213,6 @@ def test_bucket_list_many():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='prefixes in multi-component object names')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -271,7 +269,6 @@ def validate_bucket_list(bucket, prefix, delimiter, marker, max_keys,
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='prefixes in multi-component object names')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 def test_bucket_list_delimiter_prefix():
     bucket = _create_keys(keys=['asdf', 'boo/bar', 'boo/baz/xyzzy', 'cquux/thud', 'cquux/bla'])
 
@@ -333,7 +330,6 @@ def test_bucket_list_delimiter_alt():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='prefixes starting with underscore')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -459,7 +455,6 @@ def test_bucket_list_delimiter_unreadable():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='empty delimiter can be specified')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -482,7 +477,6 @@ def test_bucket_list_delimiter_empty():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='unspecified delimiter defaults to none')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -504,7 +498,6 @@ def test_bucket_list_delimiter_none():
 @attr(method='get')
 @attr(operation='list')
 @attr(assertion='unused delimiter is not found')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -526,7 +519,6 @@ def test_bucket_list_delimiter_not_exist():
 @attr(method='get')
 @attr(operation='list under prefix')
 @attr(assertion='returns only objects under prefix')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -568,7 +560,6 @@ def test_bucket_list_prefix_alt():
 @attr(method='get')
 @attr(operation='list under prefix')
 @attr(assertion='empty prefix returns everything')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -590,7 +581,6 @@ def test_bucket_list_prefix_empty():
 @attr(method='get')
 @attr(operation='list under prefix')
 @attr(assertion='unspecified prefix returns everything')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -752,7 +742,6 @@ def test_bucket_list_prefix_delimiter_prefix_delimiter_not_exist():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='pagination w/max_keys=1, marker')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -777,7 +766,6 @@ def test_bucket_list_maxkeys_one():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='pagination w/max_keys=0')
-@attr('skip_for_storj') # todo: max_keys=0 returns all results, not zero: https://github.com/storj/gateway-mt/issues/146
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -794,7 +782,6 @@ def test_bucket_list_maxkeys_zero():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='pagination w/o max_keys')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -870,7 +857,6 @@ def test_bucket_list_marker_none():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='no pagination, empty marker')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -890,7 +876,6 @@ def test_bucket_list_marker_empty():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='non-printing marker')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -910,7 +895,6 @@ def test_bucket_list_marker_unreadable():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='marker not-in-list')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -928,7 +912,6 @@ def test_bucket_list_marker_not_in_list():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='marker after list')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -946,7 +929,6 @@ def test_bucket_list_marker_after_list():
 @attr(method='get')
 @attr(operation='list all keys')
 @attr(assertion='marker before list')
-@attr('skip_for_storj') # todo: no lexicographic ordering: https://github.com/storj/gateway-st/issues/49
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -1990,7 +1972,7 @@ def test_post_object_upload_larger_than_chunk():
 
 	utc = pytz.utc
 	expires = datetime.datetime.now(utc) + datetime.timedelta(seconds=+6000)
-	
+
 	policy_document = {"expiration": expires.strftime("%Y-%m-%dT%H:%M:%SZ"),\
 	"conditions": [\
 	{"bucket": bucket.name},\
@@ -6568,7 +6550,7 @@ def test_multipart_copy_invalid_range():
     valid_reason = ['Bad Request', 'Requested Range Not Satisfiable']
     if not e.reason in valid_reason:
        raise AssertionError("Invalid reason " + e.reason )
-    # no standard error code defined 
+    # no standard error code defined
     # eq(e.error_code, 'InvalidArgument')
 
 @attr(resource='object')
@@ -6754,7 +6736,7 @@ def test_multipart_upload_multiple_sizes():
 
     (upload, data) = _multipart_upload(bucket, key, 10 * 1024 * 1024 + 100 * 1024)
     upload.complete_upload()
- 
+
     (upload, data) = _multipart_upload(bucket, key, 10 * 1024 * 1024 + 600 * 1024)
     upload.complete_upload()
 
@@ -6801,7 +6783,6 @@ def test_multipart_copy_multiple_sizes():
 @attr(method='put')
 @attr(operation='check failure on multiple multi-part upload with size too small')
 @attr(assertion='fails 400')
-@attr('skip_for_storj') # todo: minimum part size error not mapped: https://github.com/storj/gateway-mt/issues/105
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6946,9 +6927,6 @@ def test_list_multipart_upload():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='multi-part upload with missing part')
-# todo: doesn't raise an error, because etag validation was disabled.
-# see https://github.com/storj/gateway-mt/issues/43
-@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6968,9 +6946,6 @@ def test_multipart_upload_missing_part():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='multi-part upload with incorrect ETag')
-# todo: doesn't raise an error, because etag validation was disabled.
-# see https://github.com/storj/gateway-mt/issues/43
-@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -7124,7 +7099,7 @@ def _cors_request_and_check(func, url, headers, expect_status, expect_allow_orig
     assert r.headers['access-control-allow-origin'] == expect_allow_origin
     assert r.headers['access-control-allow-methods'] == expect_allow_methods
 
-    
+
 
 @attr(resource='bucket')
 @attr(method='get')
@@ -7845,7 +7820,7 @@ def test_ranged_request_empty_object():
     e = assert_raises(boto.exception.S3ResponseError, key.open, 'r', headers={'Range': 'bytes=40-50'})
     eq(e.status, 416)
     eq(e.error_code, 'InvalidRange')
-    
+
 def check_can_test_multiregion():
     if not targets.main.master or len(targets.main.secondaries) == 0:
         raise SkipTest
@@ -8154,7 +8129,7 @@ def remove_obj_head(bucket, objname, k, c):
     print 'removing obj=', objname
     key = bucket.delete_key(objname)
 
-    k.append(key)    
+    k.append(key)
     c.append(None)
 
     eq(key.delete_marker, True)
@@ -10187,7 +10162,7 @@ def test_sse_kms_method_head():
     eq(res.status, 200)
     eq(res.getheader('x-amz-server-side-encryption'), 'aws:kms')
     eq(res.getheader('x-amz-server-side-encryption-aws-kms-key-id'), 'testkey-1')
-    
+
     res = _make_request('HEAD', bucket, key, authenticated=True, request_headers=sse_kms_client_headers)
     eq(res.status, 400)
 
@@ -10286,7 +10261,7 @@ def test_sse_kms_multipart_upload():
 
     eq(result.get('x-rgw-object-count', 1), 1)
     eq(result.get('x-rgw-bytes-used', 30 * 1024 * 1024), 30 * 1024 * 1024)
-    
+
     k = bucket.get_key(key)
     eq(k.metadata['foo'], 'bar')
     eq(k.content_type, content_type)
@@ -12030,4 +12005,3 @@ def test_bucket_policy_get_obj_acl_existing_tag():
 
     res = new_conn.make_request("GET",bucket.name, 'invalidtag', query_args='tagging')
     eq(res.status, 403)
-

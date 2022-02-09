@@ -184,7 +184,6 @@ def tag(*tags):
 @attr(method='put')
 @attr(operation='create w/invalid MD5')
 @attr(assertion='fails 400')
-@attr('skip_for_storj') # todo: returns BadDigest, not InvalidDigest: https://github.com/storj/gateway-mt/issues/140
 @nose.with_setup(teardown=_clear_custom_headers)
 def test_object_create_bad_md5_invalid_short():
     key = _setup_bad_object({'Content-MD5':'YWJyYWNhZGFicmE='})
@@ -1815,4 +1814,3 @@ def test_bucket_create_bad_amz_date_before_epoch_aws4():
     eq(e.status, 403)
     eq(e.reason, 'Forbidden')
     assert e.error_code in ('AccessDenied', 'SignatureDoesNotMatch')
-

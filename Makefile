@@ -94,6 +94,7 @@ ci-dependencies-start:
 		--domain-name gateway \
 		--insecure-disable-tls \
 		--insecure-log-all
+		--s3compatibility.fully-compatible-listing
 
 .PHONY: ci-dependencies-stop
 ci-dependencies-stop:
