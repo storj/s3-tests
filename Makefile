@@ -15,13 +15,13 @@ clean-image:
 ci-image-run:
 	# Fetch authservice tls cert for use by uplink-cli
 	docker exec splunk-s3-tests-sim-$$BUILD_NUMBER \
-		bash -c "echo -n | openssl s_client -connect authservice:7777 | openssl x509 > authservice-cert.pem"
+		bash -c "echo -n | openssl s_client -connect authservice:20003 | openssl x509 > authservice-cert.pem"
     # Every Makefile rule is run in its shell, so we need to couple these two so
     # exported credentials are visible to the `docker run ...` command.
-	export $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER uplink access register --access $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env GATEWAY_0_ACCESS) --auth-service authservice:7777 --ca-cert authservice-cert.pem --format env); \
+	export $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER uplink access register --access $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env GATEWAY_0_ACCESS) --auth-service authservice:20003 --ca-cert authservice-cert.pem --format env); \
 	docker run \
 	--network splunk-s3-tests-network-$$BUILD_NUMBER \
-	-e ENDPOINT=gateway:7777 -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SECURE=0 \
+	-e ENDPOINT=gateway:20010 -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SECURE=0 \
 	--name splunk-s3-tests-$$BUILD_NUMBER \
 	--rm storjlabs/splunk-s3-tests:latest
 
@@ -76,20 +76,20 @@ ci-dependencies-start:
 	--name splunk-s3-tests-authservice-$$BUILD_NUMBER \
 	--volume=$$PWD/volumes/authservice:/cert:ro \
 	--rm -d storjlabs/authservice:dev run \
-		--listen-addr :8000 \
+		--listen-addr :20000 \
 		--cert-file /cert/authservice-cert.pem \
 		--key-file /cert/authservice-key.pem \
 		--allowed-satellites $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_ID)@ \
 		--auth-token super-secret \
-		--endpoint http://gateway:7777 \
+		--endpoint http://gateway:20010 \
 		--kv-backend memory://
 
 	docker run \
 	--network splunk-s3-tests-network-$$BUILD_NUMBER --network-alias gateway \
 	--name splunk-s3-tests-gateway-$$BUILD_NUMBER \
 	--rm -d storjlabs/gateway-mt:dev run \
-		--server.address :7777 \
-		--auth.base-url http://authservice:8000 \
+		--server.address :20010 \
+		--auth.base-url http://authservice:20000 \
 		--auth.token super-secret \
 		--domain-name gateway \
 		--insecure-disable-tls \
