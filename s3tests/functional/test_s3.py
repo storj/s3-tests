@@ -6589,7 +6589,6 @@ def _check_content_using_range(k, data, step):
 @attr(method='put')
 @attr(operation='complete multi-part upload')
 @attr(assertion='successful')
-@attr('skip_for_storj') # todo: custom metadata not saved for multi-part uploads: https://github.com/storj/gateway-mt/issues/39
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6700,7 +6699,6 @@ def _check_upload_multipart_resend(bucket, key, objlen, resend_parts):
 @attr(method='put')
 @attr(operation='complete multi-part upload')
 @attr(assertion='successful')
-@attr('skip_for_storj') # todo: custom metadata not saved for multi-part uploads: https://github.com/storj/gateway-mt/issues/39
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
