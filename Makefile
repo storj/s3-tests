@@ -80,11 +80,7 @@ ci-dependencies-start:
 
 .PHONY: ci-dependencies-stop
 ci-dependencies-stop:
-	-docker stop splunk-s3-tests-gateway-$$BUILD_NUMBER
-	-docker stop splunk-s3-tests-authservice-$$BUILD_NUMBER
-	-docker stop splunk-s3-tests-sim-$$BUILD_NUMBER
-	-docker stop splunk-s3-tests-redis-$$BUILD_NUMBER
-	-docker stop splunk-s3-tests-postgres-$$BUILD_NUMBER
+	-docker stop --time=1 $$(docker ps -qf network=splunk-s3-tests-network-$$BUILD_NUMBER)
 
 .PHONY: ci-dependencies-clean
 ci-dependencies-clean:
