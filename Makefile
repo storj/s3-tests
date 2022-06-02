@@ -52,7 +52,7 @@ ci-dependencies-start:
 
 	# We need to block until storj-sim finishes its build and launches;
 	# otherwise, we would pass an invalid satellite ID/address to authservice.
-	until docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_ID > /dev/null; do \
+	until docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_URL > /dev/null; do \
 		echo "*** storj-sim is not yet available; waiting for 3s..." && sleep 3; \
 	done
 
@@ -61,7 +61,7 @@ ci-dependencies-start:
 	--name splunk-s3-tests-authservice-$$BUILD_NUMBER \
 	--rm -d storjlabs/authservice:dev run \
 		--listen-addr :20000 \
-		--allowed-satellites $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_ID)@ \
+		--allowed-satellites $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_URL) \
 		--auth-token super-secret \
 		--endpoint http://gateway:20010 \
 		--kv-backend memory://
