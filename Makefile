@@ -15,7 +15,7 @@ clean-image:
 ci-image-run:
 	# Every Makefile rule is run in its shell, so we need to couple these two so
 	# exported credentials are visible to the `docker run ...` command.
-	export $$(docker run --network splunk-s3-tests-network-$$BUILD_NUMBER --rm storjlabs/authservice:dev register --address drpc://authservice:20002 --format-env $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env GATEWAY_0_ACCESS)); \
+	export $$(docker run --network splunk-s3-tests-network-$$BUILD_NUMBER --rm storjlabs/authservice:dev register --address drpc://authservice:20002 --format-env $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env GATEWAY_0_ACCESS)) && \
 	docker run \
 	--network splunk-s3-tests-network-$$BUILD_NUMBER \
 	-e ENDPOINT=gateway:20010 -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SECURE=0 \
