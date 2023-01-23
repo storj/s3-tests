@@ -64,7 +64,7 @@ ci-dependencies-start:
 		--allowed-satellites $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_URL) \
 		--auth-token super-secret \
 		--endpoint http://gateway:20010 \
-		--kv-backend memory://
+		--kv-backend badger://
 
 	docker run \
 	--network splunk-s3-tests-network-$$BUILD_NUMBER --network-alias gateway \
