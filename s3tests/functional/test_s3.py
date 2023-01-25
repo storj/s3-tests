@@ -6890,8 +6890,6 @@ def test_abort_multipart_upload_not_found():
 @attr(method='put')
 @attr(operation='concurrent multi-part uploads')
 @attr(assertion='successful')
-# todo: multi-part uploads with same bucket and key are overwritten: https://github.com/storj/gateway-mt/issues/149
-@attr('skip_for_storj')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
