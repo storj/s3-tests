@@ -64,7 +64,8 @@ ci-dependencies-start:
 		--allowed-satellites $$(docker exec splunk-s3-tests-sim-$$BUILD_NUMBER storj-sim network env SATELLITE_0_URL) \
 		--auth-token super-secret \
 		--endpoint http://gateway:20010 \
-		--kv-backend memory://
+		--kv-backend badger:// \
+		--node.first-start
 
 	docker run \
 	--network splunk-s3-tests-network-$$BUILD_NUMBER --network-alias gateway \
@@ -77,6 +78,10 @@ ci-dependencies-start:
 		--insecure-disable-tls \
 		--insecure-log-all \
 		--s3compatibility.fully-compatible-listing
+
+	until [ ! -z $$(docker exec splunk-s3-tests-sim-${BUILD_NUMBER} storj-sim network env GATEWAY_0_ACCESS) ]; do \
+		echo "*** main access grant is not yet available; waiting for 3s..." && sleep 3; \
+	done
 
 .PHONY: ci-dependencies-stop
 ci-dependencies-stop:
