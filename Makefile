@@ -79,7 +79,7 @@ ci-dependencies-start:
 		--insecure-log-all \
 		--s3compatibility.fully-compatible-listing
 
-	until [ ! -z $$(docker exec integration-sim-${BUILD_NUMBER} storj-sim network env GATEWAY_0_ACCESS) ]; do \
+	until [ ! -z $$(docker exec splunk-s3-tests-sim-${BUILD_NUMBER} storj-sim network env GATEWAY_0_ACCESS) ]; do \
 		echo "*** main access grant is not yet available; waiting for 3s..." && sleep 3; \
 	done
 
