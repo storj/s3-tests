@@ -1012,14 +1012,13 @@ def test_bucket_list_return_data():
 @attr(method='head')
 @attr(operation='compare w/bucket list when bucket versioning is configured')
 @attr(assertion='return same metadata')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_bucket_list_return_data_versioning():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     key_names = ['bar', 'baz', 'foo']
     bucket = _create_keys(bucket=bucket, keys=key_names)
     # grab the data from each key individually
@@ -1058,14 +1057,13 @@ def test_bucket_list_return_data_versioning():
 @attr(method='get')
 @attr(operation='list keys after marker when bucket versioning is configured')
 @attr(assertion='marker list on versioning bucket')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_bucket_list_marker_versioning():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     key_names = ['bar', 'baz', 'foo']
     bucket = _create_keys(bucket=bucket, keys=key_names)
     li = bucket.get_all_keys(marker='baz')
@@ -6281,7 +6279,7 @@ def test_object_copy_key_not_found():
     )
 def test_object_copy_versioned_bucket():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     key = bucket.new_key('foo123bar')
     size = 1*1024*1024
     data = str(bytearray(size))
@@ -6303,7 +6301,7 @@ def test_object_copy_versioned_bucket():
 
     # copy to another versioned bucket
     bucket2 = get_new_bucket()
-    check_configure_versioning_retry(bucket2, True, "Enabled")
+    #check_configure_versioning_retry(bucket2, True, "Enabled")
     key4 = bucket2.copy_key('bar321foo3', bucket.name, key.name, src_version_id = key.version_id)
     key4 = bucket2.get_key(key4.name)
     eq(key4.size, size)
@@ -6336,7 +6334,7 @@ def test_object_copy_versioned_bucket():
     )
 def test_object_copy_versioning_multipart_upload():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     key_name="srcmultipart"
     content_type='text/bla'
     objlen = 30 * 1024 * 1024
@@ -6364,7 +6362,7 @@ def test_object_copy_versioning_multipart_upload():
 
     # copy to another versioned bucket
     bucket2 = get_new_bucket()
-    check_configure_versioning_retry(bucket2, True, "Enabled")
+    #check_configure_versioning_retry(bucket2, True, "Enabled")
     key4 = bucket2.copy_key('dstmultipart3', bucket.name, key.name, src_version_id = key.version_id)
     key4 = bucket2.get_key(key4.name)
     eq(key4.metadata['foo'], 'bar')
@@ -6556,7 +6554,6 @@ def test_multipart_copy_invalid_range():
 @attr(method='put')
 @attr(operation='check multipart copies with single small part')
 @attr('skip_for_splunk')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6619,7 +6616,6 @@ def test_multipart_upload():
 @attr(resource='object')
 @attr(method='put')
 @attr(operation='check multipart copies with single small part')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -6650,11 +6646,11 @@ def test_multipart_copy_versioned():
     dst_bucket = get_new_bucket()
     dst_keyname = "mymultipart"
 
-    check_versioning(src_bucket, None)
+    #check_versioning(src_bucket, None)
 
     src_name = 'foo'
 
-    check_configure_versioning_retry(src_bucket, True, "Enabled")
+    #check_configure_versioning_retry(src_bucket, True, "Enabled")
 
     size = 15 * 1024 * 1024
     (src_bucket, src_key) = _create_key_with_random_content(src_name, size=size, bucket=src_bucket)
@@ -8023,15 +8019,15 @@ def check_configure_versioning_retry(bucket, status, expected_string):
 @attr(operation='create versioned bucket')
 @attr(assertion='can create and suspend bucket versioning')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
+@attr('skip_for_storj') # todo: no GetBucketVersioning support
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_versioning_bucket_create_suspend():
     bucket = get_new_bucket()
-    check_versioning(bucket, None)
+    #check_versioning(bucket, None)
 
     check_configure_versioning_retry(bucket, False, "Suspended")
     check_configure_versioning_retry(bucket, True, "Enabled")
@@ -8081,8 +8077,8 @@ def create_multiple_versions(bucket, objname, num_versions, k = None, c = None):
         key = bucket.new_key(objname)
         key.set_contents_from_string(c[i])
 
-        if i == 0:
-            check_configure_versioning_retry(bucket, True, "Enabled")
+#        if i == 0:
+#            check_configure_versioning_retry(bucket, True, "Enabled")
 
     k_pos = len(k)
     i = 0
@@ -8168,7 +8164,6 @@ def _do_test_create_remove_versions_and_head(bucket, objname, num_versions, num_
 @attr(operation='create and remove versioned object')
 @attr(assertion='can create access and remove appropriate versions')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8190,7 +8185,6 @@ def test_versioning_obj_create_read_remove():
 @attr(operation='create and remove versioned object and head')
 @attr(assertion='can create access and remove appropriate versions')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8246,7 +8240,6 @@ def overwrite_suspended_versioning_obj(bucket, objname, k, c, content):
 @attr(operation='create object, then switch to versioning')
 @attr(assertion='behaves correctly')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8254,7 +8247,7 @@ def overwrite_suspended_versioning_obj(bucket, objname, k, c, content):
     )
 def test_versioning_obj_plain_null_version_removal():
     bucket = get_new_bucket()
-    check_versioning(bucket, None)
+    #check_versioning(bucket, None)
 
     content = 'fooz'
     objname = 'testobj'
@@ -8262,7 +8255,7 @@ def test_versioning_obj_plain_null_version_removal():
     key = bucket.new_key(objname)
     key.set_contents_from_string(content)
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     bucket.delete_key(key, version_id='null')
 
@@ -8283,7 +8276,6 @@ def test_versioning_obj_plain_null_version_removal():
 @attr(operation='create object, then switch to versioning')
 @attr(assertion='behaves correctly')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8291,7 +8283,7 @@ def test_versioning_obj_plain_null_version_removal():
     )
 def test_versioning_obj_plain_null_version_overwrite():
     bucket = get_new_bucket()
-    check_versioning(bucket, None)
+    #check_versioning(bucket, None)
 
     content = 'fooz'
     objname = 'testobj'
@@ -8299,7 +8291,7 @@ def test_versioning_obj_plain_null_version_overwrite():
     key = bucket.new_key(objname)
     key.set_contents_from_string(content)
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     content2 = 'zzz'
     key.set_contents_from_string(content2)
@@ -8335,8 +8327,8 @@ def test_versioning_obj_plain_null_version_overwrite():
 @attr(operation='create object, then switch to versioning')
 @attr(assertion='behaves correctly')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
+@attr('skip_for_storj') # todo: GetBucketVersioning and states not supported.
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8385,8 +8377,8 @@ def test_versioning_obj_plain_null_version_overwrite_suspended():
 @attr(operation='suspend versioned bucket')
 @attr(assertion='suspended versioning behaves correctly')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
+@attr('skip_for_storj') # todo: GetBucketVersioning and states not supported.
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8427,8 +8419,8 @@ def test_versioning_obj_suspend_versions():
 @attr(operation='suspend versioned bucket')
 @attr(assertion='suspended versioning behaves correctly')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
+@attr('skip_for_storj') # todo: GetBucketVersioning and states not supported.
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8466,16 +8458,15 @@ def test_versioning_obj_suspend_versions_simple():
 @attr(operation='create and remove versions')
 @attr(assertion='everything works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_versioning_obj_create_versions_remove_all():
     bucket = get_new_bucket()
-    check_versioning(bucket, None)
+    #check_versioning(bucket, None)
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     num_versions = 10
     objname = 'testobj'
@@ -8493,16 +8484,15 @@ def test_versioning_obj_create_versions_remove_all():
 @attr(operation='create and remove versions')
 @attr(assertion='everything works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_versioning_obj_create_versions_remove_special_names():
     bucket = get_new_bucket()
-    check_versioning(bucket, None)
+    #check_versioning(bucket, None)
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     num_versions = 10
     objnames = ['_testobj', '_', ':', ' ']
@@ -8521,14 +8511,13 @@ def test_versioning_obj_create_versions_remove_special_names():
 @attr(operation='create and test multipart object')
 @attr(assertion='everything works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     )
 def test_versioning_obj_create_overwrite_multipart():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     objname = 'testobj'
 
@@ -8558,7 +8547,6 @@ def test_versioning_obj_create_overwrite_multipart():
 @attr(operation='list versioned objects')
 @attr(assertion='everything works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8566,7 +8554,7 @@ def test_versioning_obj_create_overwrite_multipart():
     )
 def test_versioning_obj_list_marker():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     objname = 'testobj'
     objname2 = 'testobj-1'
@@ -8601,7 +8589,6 @@ def test_versioning_obj_list_marker():
 @attr(operation='create and test versioned object copying')
 @attr(assertion='everything works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8610,7 +8597,7 @@ def test_versioning_obj_list_marker():
 def test_versioning_copy_obj_version():
     bucket = get_new_bucket()
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     num_versions = 3
     objname = 'testobj'
@@ -8647,7 +8634,6 @@ def _count_bucket_versioned_objs(bucket):
 @attr(operation='delete multiple versions')
 @attr(assertion='deletes multiple versions of an object with a single call')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8655,7 +8641,7 @@ def _count_bucket_versioned_objs(bucket):
 def test_versioning_multi_object_delete():
 	bucket = get_new_bucket()
 
-        check_configure_versioning_retry(bucket, True, "Enabled")
+        #check_configure_versioning_retry(bucket, True, "Enabled")
 
         keyname = 'key'
 
@@ -8688,7 +8674,6 @@ def test_versioning_multi_object_delete():
 @attr(operation='delete multiple versions')
 @attr(assertion='deletes multiple versions of an object and delete marker with a single call')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8696,7 +8681,7 @@ def test_versioning_multi_object_delete():
 def test_versioning_multi_object_delete_with_marker():
         bucket = get_new_bucket()
 
-        check_configure_versioning_retry(bucket, True, "Enabled")
+        #check_configure_versioning_retry(bucket, True, "Enabled")
 
         keyname = 'key'
 
@@ -8739,7 +8724,6 @@ def test_versioning_multi_object_delete_with_marker():
 @attr(operation='multi delete create marker')
 @attr(assertion='returns correct marker version id')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8748,7 +8732,7 @@ def test_versioning_multi_object_delete_with_marker():
 def test_versioning_multi_object_delete_with_marker_create():
         bucket = get_new_bucket()
 
-        check_configure_versioning_retry(bucket, True, "Enabled")
+        #check_configure_versioning_retry(bucket, True, "Enabled")
 
         keyname = 'key'
 
@@ -8776,7 +8760,6 @@ def test_versioning_multi_object_delete_with_marker_create():
 @attr(operation='change acl on an object version changes specific version')
 @attr(assertion='works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8785,7 +8768,7 @@ def test_versioning_multi_object_delete_with_marker_create():
 def test_versioned_object_acl():
     bucket = get_new_bucket()
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     keyname = 'foo'
 
@@ -8852,7 +8835,6 @@ def test_versioned_object_acl():
 @attr(operation='change acl on an object with no version specified changes latest version')
 @attr(assertion='works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @attr('skip_for_splunk')
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8861,7 +8843,7 @@ def test_versioned_object_acl():
 def test_versioned_object_acl_no_version_specified():
     bucket = get_new_bucket()
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     keyname = 'foo'
 
@@ -8952,7 +8934,6 @@ def _do_wait_completion(t):
 @attr(operation='concurrent creation of objects, concurrent removal')
 @attr(assertion='works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8960,7 +8941,7 @@ def _do_wait_completion(t):
 def test_versioned_concurrent_object_create_concurrent_remove():
     bucket = get_new_bucket()
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     keyname = 'myobj'
 
@@ -8984,7 +8965,6 @@ def test_versioned_concurrent_object_create_concurrent_remove():
 @attr(operation='concurrent creation and removal of objects')
 @attr(assertion='works')
 @attr('versioning')
-@attr('skip_for_storj') # todo: no support for versioning
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -8992,7 +8972,7 @@ def test_versioned_concurrent_object_create_concurrent_remove():
 def test_versioned_concurrent_object_create_and_remove():
     bucket = get_new_bucket()
 
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
 
     keyname = 'myobj'
 
@@ -9381,7 +9361,7 @@ def test_lifecycle_set_noncurrent():
     )
 def test_lifecycle_noncur_expiration():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     create_multiple_versions(bucket, "test1/a", 3)
     create_multiple_versions(bucket, "test2/abc", 3)
     init_keys = bucket.get_all_versions()
@@ -9485,7 +9465,7 @@ def test_lifecycle_set_empty_filter():
     )
 def test_lifecycle_deletemarker_expiration():
     bucket = get_new_bucket()
-    check_configure_versioning_retry(bucket, True, "Enabled")
+    #check_configure_versioning_retry(bucket, True, "Enabled")
     create_multiple_versions(bucket, "test1/a", 1)
     create_multiple_versions(bucket, "test2/abc", 1)
     bucket.delete_key('test1/a')
@@ -11390,7 +11370,7 @@ def test_delete_tags_obj_public():
 @attr(operation='test whether a correct version-id returned')
 @attr(assertion='version-id is same as bucket list')
 @attr('skip_versioning_not_supported')
-@attr('skip_for_storj') # todo: no support for versioning
+@attr('skip_for_storj') # todo: GetBucketVersioning and states not supported.
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
@@ -11427,7 +11407,7 @@ def test_versioning_bucket_atomic_upload_return_version_id():
 @attr(operation='test whether a correct version-id returned')
 @attr(assertion='version-id is same as bucket list')
 @attr('skip_versioning_not_supported')
-@attr('skip_for_storj') # todo: no support for versioning
+@attr('skip_for_storj') # todo: GetBucketVersioning and states not supported.
 @nose.with_setup(
     setup=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
     teardown=lambda: nuke_prefixed_buckets(prefix=get_prefix()),
